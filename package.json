@@ -1,0 +1,10 @@
+{
+    "name": "onlinetabletop",
+    "version": "0.0.1",
+    "description": "tabletopDnD",
+    "main": "app.js",
+    "dependencies": {
+        "express": "^4.17.1",
+        "socket.io": "^3.0.1"
+    }
+}

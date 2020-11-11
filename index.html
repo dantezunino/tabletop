@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        #boxy{
+    display: flex;
+    flex-direction: row;
+    }
+
+        .masterSquare{
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 288px;
+    border: solid;
+    }
+
+    a{
+    border: solid;
+    border-color: black;
+    width: 30px;
+    height: 30px;
+    }
+
+    .basic{
+    border: solid;
+    border-color: black;
+    width: 30px;
+    height: 30px;
+    font-size: 0px;
+    }
+
+    .listy {
+    font-size: larger;
+    }
+
+    .rojoDiv{
+    align-self: auto;
+    background-color: red;
+    min-height: 25px;
+    min-width: 25px;
+    border: solid;
+    font-size: 0px;    
+    }
+    .negroDiv{
+    align-self: auto;
+    background-color: rgb(15, 12, 12);
+    min-height: 25px;
+    min-width: 25px;
+    border: solid;
+    font-size: 0px;
+    }
+    .verdeDiv{
+    align-self: auto;
+    background-color: rgb(37, 148, 43);
+    min-height: 25px;
+    min-width: 25px;
+    border: solid;
+    font-size: 0px;
+    }
+    .azulDiv{
+    align-self: auto;
+    background-color: rgb(64, 32, 211);
+    min-height: 25px;
+    min-width: 25px;
+    border: solid;
+    font-size: 0px;
+    }
+    .rosaDiv{
+    align-self: auto;
+    background-color: rgb(247, 0, 255);
+    min-height: 25px;
+    min-width: 25px;
+    border: solid;
+    font-size: 0px;
+    }
+    .blancoDiv{
+    align-self: auto;
+    background-color: rgb(255, 255, 255);
+    min-height: 25px;
+    min-width: 25px;
+    border: solid;
+    font-size: 0px;
+    }
+    </style>
+</head>
+<body>
+<div id="boxy" onclick="recorrer()">
+    <div class="masterSquare">
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+        <a></a>
+    </div>
+
+    <div class="listy">
+            <ol>Verde - <input id="verde" type="checkbox"></ol>
+            <ol>Rojo - <input id="rojo" type="checkbox"></ol>
+            <ol>Azul - <input id="azul" type="checkbox"></ol>
+            <ol>Negro - <input id="negro" type="checkbox"></ol>
+            <ol>Rosa - <input id="rosa" type="checkbox"></ol>
+            <ol>Blanco - <input id="blanco" type="checkbox"></ol>
+    </div>
+
+    <button value="reset" id="reseti"></button>
+</div>
+
+<script>
+//once the page is loaded we listen for a click in the table
+document.addEventListener("DOMContentLoaded",() =>{
+let modelando = document.querySelectorAll("a");
+modelando.forEach(function(h){h.addEventListener("click", loco);})  //we take all the "a", our squares, and if one is clicked on our function starts
+
+var color= null; //selfexplanatory, is the color we choose for the square. Right now is empty
+
+//Taking the value of the color we are gonna use later when a square is clicked on
+function select(){
+    var verde = document.getElementById("verde");
+    var rojo = document.getElementById("rojo");
+    var azul = document.getElementById("azul");
+    var negro = document.getElementById("negro");
+    var rosa = document.getElementById("rosa");
+    var blanco = document.getElementById("blanco");
+    if(verde.checked){color="verdeDiv";rosa.checked=false; rojo.checked=false; azul.checked=false; negro.checked=false; blanco.checked=false;}
+    if(rojo.checked){color="rojoDiv"; rosa.checked=false; verde.checked=false; azul.checked=false; negro.checked=false; blanco.checked=false;}
+    if(azul.checked){color="azulDiv"; rosa.checked=false; rojo.checked=false; verde.checked=false; negro.checked=false; blanco.checked=false;}
+    if(negro.checked){color="negroDiv"; rosa.checked=false; rojo.checked=false; azul.checked=false; verde.checked=false; blanco.checked=false;}
+    if(rosa.checked){color="rosaDiv"; verde.checked=false; rojo.checked=false; azul.checked=false; negro.checked=false; blanco.checked=false;}
+    if(blanco.checked){color="blancoDiv"; verde.checked=false; rojo.checked=false; azul.checked=false; negro.checked=false; rosa.checked=false;}
+}
+var lista = ["rojoDiv", "verdeDiv", "azulDiv", "negroDiv", "rosaDiv", "blancoDiv"];
+//When a square is clicked on we remove it's class if any, add "basic" class just because, take the color value from the html, add that color as class to the square and a name
+function loco(){
+    for(var i=0; i<6; i++){this.classList.remove(lista[i]);}
+    select();
+    this.classList.add(color);
+    this.innerHTML = color;
+}
+
+});
+
+//Once we finish our operation, we send the new values to the server, read the new values from there and apply the changes
+var socket = io();
+var cambiolor = null;
+var cuadrados = Array.from(document.querySelectorAll("a"));
+var i;
+function recorrer(){
+    for(i=0; i<cuadrados.length; i++){
+    if (cuadrados[i].innerHTML === "verdeDiv"){
+        socket.emit("repintado", [i, "verdeDiv"]);
+        cuadrados[i].innerHTML = "";}
+    
+    if (cuadrados[i].innerHTML === "rojoDiv"){
+        socket.emit("repintado", [i, "rojoDiv"]); 
+        cuadrados[i].innerHTML = "";}
+    
+    if (cuadrados[i].innerHTML === "azulDiv"){
+        socket.emit("repintado", [i, "azulDiv"]); 
+        cuadrados[i].innerHTML = "";}
+    
+    if (cuadrados[i].innerHTML === "negroDiv"){
+        socket.emit("repintado", [i, "negroDiv"]); 
+        cuadrados[i].innerHTML = "";}
+    
+    if (cuadrados[i].innerHTML === "blancoDiv"){
+        socket.emit("repintado", [i, "blancoDiv"]); 
+        cuadrados[i].innerHTML = "";}
+    
+    if (cuadrados[i].innerHTML === "rosaDiv"){
+        socket.emit("repintado", [i, "rosaDiv"]); 
+        cuadrados[i].innerHTML = "";}
+    };
+}
+socket.on("repintado", function(valores){
+    var numero = valores[0];
+    var coloro = valores[1];
+    console.log(valores[1]);
+    var lista = ["rojoDiv", "verdeDiv", "azulDiv", "negroDiv", "rosaDiv", "blancoDiv"];
+    for(var i=0; i<6; i++){cuadrados[numero].classList.remove(lista[i]);}
+    cuadrados[numero].classList.add(coloro);
+});
+
+</script>
+
+</body>
